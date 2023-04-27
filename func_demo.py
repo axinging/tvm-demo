@@ -1,27 +1,23 @@
 import tvm
-from tvm import relay
-from tvm.contrib import graph_executor
-import numpy as np
+import tvm.testing
 from tvm import te
-#import pdb; pdb.set_trace()
-
+import numpy as np
+# import pdb; pdb.set_trace()
+tgt = tvm.target.Target(target="llvm", host="llvm")
 n = te.var("n")
 A = te.placeholder((n,), name="A")
-B = te.compute(A.shape, lambda *i: A(*i) + 1.0, name="B")
-s = te.create_schedule(B.op)
-# Compile library as dynamic library
-mod = tvm.build(s, [A, B], "llvm", name="addone")
+B = te.placeholder((n,), name="B")
+C = te.compute(A.shape, lambda i: A[i] + B[i], name="C")
 
-fname = "addone"
-# Get the function from the module
-f = mod.get_function(fname)
-# Use tvm.nd.array to convert numpy ndarray to tvm
-# NDArray type, so that function can be invoked normally
-N = 10
-x = tvm.nd.array(np.arange(N, dtype=np.float32))
-y = tvm.nd.array(np.zeros(N, dtype=np.float32))
-# Invoke the function
-f(x, y)
-np_x = x.numpy()
-np_y = y.numpy()
-
+s = te.create_schedule(C.op)
+fadd = tvm.build(s, [A, B, C], tgt, name="myadd")
+print(type(fadd)) # tvm.driver.build_module.OperatorModule
+# test
+dev = tvm.device(tgt.kind.name, 0)
+n = 1024
+a = tvm.nd.array(np.random.uniform(size=n).astype(A.dtype), dev)
+b = tvm.nd.array(np.random.uniform(size=n).astype(B.dtype), dev)
+c = tvm.nd.array(np.zeros(n, dtype=C.dtype), dev)
+fadd(a, b, c)
+tvm.testing.assert_allclose(c.numpy(), np.add(a.numpy(),b.numpy()))
+print(c.numpy())

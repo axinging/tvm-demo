@@ -14,12 +14,12 @@ mod = tvm.IRModule.from_expr(relay.Function([x, y], x + y))
 
 print(threading.get_native_id())
 print("Before build")
-lib = relay.build(mod, tvm.target.Target("llvm"), params=params)
+lib_so = relay.build(mod, tvm.target.Target("llvm"), params=params)
 print("After build")
-print(lib.get_graph_json())
-# lib_so.export_library("compiled_lib.so")
+print(lib_so.get_graph_json())
+lib_so.export_library("compiled_lib.so")
 # load it back as a runtime
-# lib: tvm.runtime.Module = tvm.runtime.load_module("compiled_lib.so")
+lib: tvm.runtime.Module = tvm.runtime.load_module("compiled_lib.so")
 
 # Call the library factory function for default and create
 # a new runtime.Module, wrap with graph module.
