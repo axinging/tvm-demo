@@ -2,7 +2,7 @@ import tvm
 from tvm import relay
 from tvm.contrib import graph_executor
 import numpy as np
-# import pdb; pdb.set_trace()
+#import pdb; pdb.set_trace()
 
 import threading
 # build the library using graph executor
@@ -16,6 +16,7 @@ print(threading.get_native_id())
 print("Before build")
 lib = relay.build(mod, tvm.target.Target("llvm"), params=params)
 print("After build")
+print(type(lib))
 print(lib.get_graph_json())
 # lib_so.export_library("compiled_lib.so")
 # load it back as a runtime

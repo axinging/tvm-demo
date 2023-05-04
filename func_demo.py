@@ -9,9 +9,23 @@ A = te.placeholder((n,), name="A")
 B = te.placeholder((n,), name="B")
 C = te.compute(A.shape, lambda i: A[i] + B[i], name="C")
 
+# Below loop is optional to create schedule
+
+
 s = te.create_schedule(C.op)
 fadd = tvm.build(s, [A, B, C], tgt, name="myadd")
-print(type(fadd)) # tvm.driver.build_module.OperatorModule
+
+#<class 'tvm.te.tensor.Tensor'>
+#compute(C, body=[(A[i] + B[i])], axis=[iter_var(i, range(min=0, ext=n))], reduce_axis=[], tag=, attrs={})
+#<class 'tvm.driver.build_module.OperatorModule'>
+print(type(C))
+print(C.op)
+print(type(fadd))
+
+#print(dir(fadd))
+#print(fadd.get_source())
+
+# print(type(fadd)) # tvm.driver.build_module.OperatorModule
 # test
 dev = tvm.device(tgt.kind.name, 0)
 n = 1024
