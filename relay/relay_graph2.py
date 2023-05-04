@@ -44,9 +44,9 @@ lib = relay.build(net, tvm.target.Target("llvm"), params=params)
 
 dev = tvm.cpu(0)
 gmod = graph_executor.GraphModule(lib["default"](dev))
-#<class 'tvm.ir.module.IRModule'>
-#<class 'tvm.relay.backend.executor_factory.GraphExecutorFactoryModule'>
-#<class 'tvm.contrib.graph_executor.GraphModule'>
+#net: <class 'tvm.ir.module.IRModule'>
+#lib: <class 'tvm.relay.backend.executor_factory.GraphExecutorFactoryModule'>
+#gmod: <class 'tvm.contrib.graph_executor.GraphModule'>
 
 print(type(net))
 print(type(lib))
