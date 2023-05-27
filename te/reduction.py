@@ -9,10 +9,12 @@ m = te.var("m")
 A = te.placeholder((n, m), name="A")
 k = te.reduce_axis((0, m), "k")
 B = te.compute((n,), lambda i: te.sum(A[i, k], axis=k), name="B")
-
+print(type(B))
 s = te.create_schedule(B.op)
+print(type(s))
 fadd = tvm.build(s, [A, B], tgt, name="myadd")
 
+print(type(fadd))
 # test
 dev = tvm.device(tgt.kind.name, 0)
 ns = 3

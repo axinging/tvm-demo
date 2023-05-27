@@ -14,6 +14,8 @@ B = te.placeholder((L, M), name="B", dtype=dtype)
 
 k = te.reduce_axis((0, L), name="k")
 C = te.compute((N, M), lambda i, j: te.sum(A[i, k] * B[k, j], axis=k), name="C")
+print(type(C))
+print(type(C.op))
 s = te.create_schedule(C.op)
 
 # print(tvm.lower(s, [A, B, C], simple_mode=True))

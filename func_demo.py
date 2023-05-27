@@ -3,6 +3,11 @@ import tvm.testing
 from tvm import te
 import numpy as np
 # import pdb; pdb.set_trace()
+
+# TE:
+# In: <class 'tvm.te.schedule.Schedule'>
+# tvm.build
+# Out: <class 'tvm.driver.build_module.OperatorModule'>
 tgt = tvm.target.Target(target="llvm", host="llvm")
 n = te.var("n")
 A = te.placeholder((n,), name="A")
@@ -11,15 +16,14 @@ C = te.compute(A.shape, lambda i: A[i] + B[i], name="C")
 
 # Below loop is optional to create schedule
 
-
 s = te.create_schedule(C.op)
+# <class 'tvm.te.schedule.Schedule'>
+print(type(s))
 fadd = tvm.build(s, [A, B, C], tgt, name="myadd")
 
-#<class 'tvm.te.tensor.Tensor'>
-#compute(C, body=[(A[i] + B[i])], axis=[iter_var(i, range(min=0, ext=n))], reduce_axis=[], tag=, attrs={})
-#<class 'tvm.driver.build_module.OperatorModule'>
-print(type(C))
-print(C.op)
+# C: <class 'tvm.te.tensor.Tensor'>
+# compute(C, body=[(A[i] + B[i])], axis=[iter_var(i, range(min=0, ext=n))], reduce_axis=[], tag=, attrs={})
+# fadd: <class 'tvm.driver.build_module.OperatorModule'>
 print(type(fadd))
 
 #print(dir(fadd))

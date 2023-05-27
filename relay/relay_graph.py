@@ -38,7 +38,11 @@ def get_network():
 
 net, params, data_shape = get_network()
 
+print(type(net))
 lib = relay.build(net, tvm.target.Target("llvm"), params=params)
+print(type(lib))
+
+print(lib.get_graph_json())
 
 dev = tvm.cpu(0)
 gmod = graph_executor.GraphModule(lib["default"](dev))
@@ -48,4 +52,4 @@ gmod.set_input("data", data)
 gmod.run()
 tvm_output = gmod.get_output(0)
 print(tvm_output.shape)
-print(tvm_output)
+# print(tvm_output)

@@ -5,6 +5,13 @@ import numpy as np
 #import pdb; pdb.set_trace()
 
 import threading
+
+# relay:
+# In: <class 'tvm.ir.module.IRModule'>
+# relay.build
+# Out: <class 'tvm.relay.backend.executor_factory.GraphExecutorFactoryModule'>
+
+
 # build the library using graph executor
 x = relay.var("x", shape=(2, 2), dtype="float32")
 y = relay.var("y", shape=(2, 2), dtype="float32")
@@ -13,11 +20,10 @@ mod = tvm.IRModule.from_expr(relay.Function([x, y], x + y))
 # build a module
 
 print(threading.get_native_id())
-print("Before build")
+print(type(mod))
 lib = relay.build(mod, tvm.target.Target("llvm"), params=params)
-print("After build")
 print(type(lib))
-print(lib.get_graph_json())
+# print(lib.get_graph_json())
 # lib_so.export_library("compiled_lib.so")
 # load it back as a runtime
 # lib: tvm.runtime.Module = tvm.runtime.load_module("compiled_lib.so")
