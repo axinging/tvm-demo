@@ -41,21 +41,10 @@ N = te.var("N")
 L= te.var("L")
 M = te.var("M")
 dtype = "float32"
-'''
-A = te.placeholder((N, L), name="A", dtype=dtype)
-B = te.placeholder((L, M), name="B", dtype=dtype)
 
-k = te.reduce_axis((0, L), name="k")
-C = te.compute((N, M), lambda i, j: te.sum(A[i, k] * B[k, j], axis=k), name="C")
-print(type(C))
-print(type(C.op))
-s = te.create_schedule(C.op)
 
-# print(tvm.lower(s, [A, B, C], simple_mode=True))
-'''
 s, [A, B, C] = matmul_v1(N, L, M,dtype)
-
-
+## TODO: 
 N, L, M = 512, 512, 512
 task = autotvm.task.create("tutorial/matmul_v1", args=(N, L, M, "float32"), target="llvm")
 print(task.config_space)
