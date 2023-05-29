@@ -21,7 +21,7 @@ class MyModule:
 
 ir_module = MyModule
 print(type(ir_module))
-print(ir_module.script())
+# print(ir_module.script())
 
 sch = tvm.tir.Schedule(ir_module)
 print(type(sch))
@@ -33,10 +33,10 @@ block_b = sch.get_block("B")
 (i,) = sch.get_loops(block_b)
 # Tile the loop nesting.
 i_0, i_1, i_2 = sch.split(i, factors=[2, 2, 2])
-print(sch.mod.script())
+# print(sch.mod.script())
 
 sch.reorder(i_0, i_2, i_1)
-print(sch.mod.script())
+# print(sch.mod.script())
 
 # mod = tvm.build(ir_module, target="llvm")  # The module for CPU backends.
 mod = tvm.build(sch.mod, target="llvm")  # The module for CPU backends.
