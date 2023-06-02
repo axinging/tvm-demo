@@ -38,7 +38,30 @@ def get_network():
 
 net, params, data_shape = get_network()
 
+print("print net: ")
 print(type(net))
+print((net))
+print("print net.script: ")
+print(type(net.script()))
+print((net.script()))
+"""
+print net:
+<class 'tvm.ir.module.IRModule'>
+def @main(%data: Tensor[(1, 3, 4, 4), float16] /* ty=Tensor[(1, 3, 4, 4), float16] */, %weight: Tensor[(16, 3, 3, 3), float16] /* ty=Tensor[(16, 3, 3, 3), float16] */, %bn_gamma: Tensor[(16), float16] /* ty=Tensor[(16), float16] */, %bn_beta: Tensor[(16), float16] /* ty=Tensor[(16), float16] */, %bn_mean: Tensor[(16), float16] /* ty=Tensor[(16), float16] */, %bn_var: Tensor[(16), float16] /* ty=Tensor[(16), float16] */, %dweight: Tensor[(1, 64), float16] /* ty=Tensor[(1, 64), float16] */) -> Tensor[(1, 1), float16] {
+  %0 = nn.conv2d(%data, %weight, padding=[0, 0, 0, 0], channels=16, kernel_size=[3, 3]) /* ty=Tensor[(1, 16, 2, 2), float16] */;
+  %1 = nn.batch_norm(%0, %bn_gamma, %bn_beta, %bn_mean, %bn_var) /* ty=(Tensor[(1, 16, 2, 2), float16], Tensor[(16), float16], Tensor[(16), float16]) */;
+  %2 = %1.0 /* ty=Tensor[(1, 16, 2, 2), float16] */;
+  %3 = nn.relu(%2) /* ty=Tensor[(1, 16, 2, 2), float16] */;
+  %4 = nn.batch_flatten(%3) /* ty=Tensor[(1, 64), float16] */;
+  nn.dense(%4, %dweight, units=None) /* ty=Tensor[(1, 1), float16] */
+}
+
+print net.script:
+<class 'tvm.runtime.container.String'>
+# from tvm.script import tir as T
+@tvm.script.ir_module
+class Module:
+"""
 lib = relay.build(net, tvm.target.Target("llvm"), params=params)
 print(type(lib))
 
