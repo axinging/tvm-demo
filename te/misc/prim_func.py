@@ -26,6 +26,12 @@ print(ir_module.script())
 # We can build the IRModule into a runnable module with specific target backends.
 #
 
+'''
+<class 'tvm.tir.function.PrimFunc'>
+<class 'tvm.ir.module.IRModule'>
+<class 'tvm.driver.build_module.OperatorModule'>
+'''
+
 print(type(func))
 print(type(ir_module))
 mod = tvm.build(ir_module, target="llvm")  # The module for CPU backends.
