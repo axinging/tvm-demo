@@ -22,7 +22,8 @@ def example():
 # functions for optimization.
 f = example()
 mod = tvm.IRModule.from_expr(f)
-
+print("tvm.IRModule.from_expr: ")
+print(type(mod))
 print(mod)
 
 # Now we can apply constant folding on the module.
@@ -34,15 +35,18 @@ fold_const = relay.transform.FoldConstant()
 # through individual functions manually to apply this pass.
 mod = fold_const(mod)
 # We can see from the updated program that the constants are folded.
+print(type(mod))
 print(mod)
 
 mod = relay.transform.EliminateCommonSubexpr()(mod)
 print(mod)
+print(type(mod))
 
 mod = relay.transform.FuseOps(fuse_opt_level=0)(mod)
 
 # We can observe that the optimized module contains functions that only have
 # a signle primitive op.
+print(type(mod))
 print(mod)
 
 '''
