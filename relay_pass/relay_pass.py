@@ -46,6 +46,7 @@ mod = relay.transform.FuseOps(fuse_opt_level=0)(mod)
 
 # We can observe that the optimized module contains functions that only have
 # a signle primitive op.
+print("After fused:")
 print(type(mod))
 print(mod)
 

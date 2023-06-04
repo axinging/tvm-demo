@@ -24,8 +24,10 @@ print(type(ir_module))
 # print(ir_module.script())
 
 sch = tvm.tir.Schedule(ir_module)
+print("before tir schedule: ")
 print(type(sch))
 print(type(sch.mod))
+print((sch.mod))
 
 # Get block by its name
 block_b = sch.get_block("B")
@@ -33,7 +35,9 @@ block_b = sch.get_block("B")
 (i,) = sch.get_loops(block_b)
 # Tile the loop nesting.
 i_0, i_1, i_2 = sch.split(i, factors=[2, 2, 2])
-# print(sch.mod.script())
+print("After tir schedule: ")
+print((sch.mod))
+print(sch.mod.script())
 
 sch.reorder(i_0, i_2, i_1)
 # print(sch.mod.script())
