@@ -31,6 +31,7 @@ print(type(lib))
 # Call the library factory function for default and create
 # a new runtime.Module, wrap with graph module.
 dev = tvm.cpu(0)
+print("type lib[default](dev): "+ str(lib["default"](dev)))
 gmod = graph_executor.GraphModule(lib["default"](dev))
 # use the graph module.
 data = tvm.nd.array((np.random.uniform(size=(2,2))).astype("float32"))

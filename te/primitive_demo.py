@@ -73,6 +73,7 @@ class Module:
 tgt = tvm.target.Target(target="llvm", host="llvm")
 
 fMatrixElementwiseMul = tvm.build(s, [A, B, C], tgt, name="myadd")
+print("type fMatrixElementwiseMul: " + str(type(fMatrixElementwiseMul)))
 
 dev = tvm.device(tgt.kind.name, 0)
 aNP = np.empty([3, 4], dtype = "float32")
